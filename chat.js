@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const GEMINI_API_KEY = "AIzaSyDIJyYtqwajZAcxywUQWZGrIFEK3PLFsW4";
+    const BACKEND_URL = "https://edunex-backend-2.onrender.com/gemini";
 
     const chatForm = document.getElementById("chat-form");
     const userInput = document.getElementById("user-input");
@@ -29,97 +29,40 @@ document.addEventListener("DOMContentLoaded", () => {
         if (div) div.remove();
     }
 
-
-
-    // -----------------------------------------
-    // 🎤 VOICE INPUT (UNCHANGED — WORKS PERFECT)
-    // -----------------------------------------
-
-    const voiceBtn = document.getElementById("voiceBtn");
-
-    let SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    let recognition = SpeechRecognition ? new SpeechRecognition() : null;
-
-    if (recognition) {
-        recognition.lang = "en-IN";
-        recognition.interimResults = false;
-        recognition.continuous = false;
-
-        voiceBtn.addEventListener("click", () => {
-            console.log("Mic clicked → listening...");
-            userInput.placeholder = "Listening...";
-            recognition.start();
-        });
-
-        recognition.onresult = (event) => {
-            let text = event.results[0][0].transcript;
-            console.log("Heard:", text);
-
-            userInput.value = text;
-
-            // Auto-send
-            chatForm.dispatchEvent(new Event("submit"));
-        };
-
-        recognition.onerror = (event) => {
-            console.log("Mic error:", event.error);
-            userInput.placeholder = "Mic error, try again";
-        };
-
-        recognition.onend = () => {
-            userInput.placeholder = "Type your message...";
-        };
-
-    } else {
-        console.log("❌ Browser does not support Speech Recognition");
-        voiceBtn.addEventListener("click", () => {
-            alert("Your browser does not support voice input.");
-        });
-    }
-
-
-
-    // ---------------------------------------------------
-    // 🔥 GEMINI AI — DIRECT INTEGRATION (NO BACKEND)
-    // ---------------------------------------------------
-
-
     // -----------------------------
-    // SEND MESSAGE → GEMINI
+    // SEND MESSAGE → BACKEND
     // -----------------------------
-    const BACKEND_URL = "https://edunex-backend-2.onrender.com/gemini";
+    chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-chatForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+        const text = userInput.value.trim();
+        if (!text) return;
 
-    const text = userInput.value.trim();
-    if (!text) return;
+        addMessage(text, "user");
+        userInput.value = "";
+        addTyping();
 
-    addMessage(text, "user");
-    userInput.value = "";
+        try {
+            const response = await fetch(BACKEND_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: text })
+            });
 
-    addTyping();
+            const data = await response.json();
+            removeTyping();
 
-    try {
-        const response = await fetch(BACKEND_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: text })
-        });
+            // Backend returns { answer: "text" }
+            if (data.answer) {
+                addMessage(data.answer, "ai");
+            } else {
+                addMessage("❌ Gemini did not return a valid message.", "ai");
+            }
 
-        const data = await response.json();
-        removeTyping();
-
-        addMessage(data.answer, "ai");
-
-    } catch (error) {
-        removeTyping();
-        addMessage("⚠️ Error connecting to backend", "ai");
-    }
-});
-
+        } catch (error) {
+            removeTyping();
+            addMessage("⚠️ Error connecting to backend", "ai");
+        }
+    });
 
 });
-
