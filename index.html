@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EDUNEX - Learning Portal</title>
+
+  <!-- styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="light">
+
+  <!-- animated background canvas -->
+  <div id="bg-anim" aria-hidden="true"></div>
+  <!-- FLOATING EDUCATIONAL ICONS -->
+<div id="floatingIcons"></div>
+
+
+  <!-- header: glassmorphic with logo + theme toggle -->
+  <header class="fixed_title">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="logo.png" alt="EDUNEX Logo" class="brand-logo" onerror="this.style.display='none'"/>
+        <div class="brand-text">
+          <div class="title">EDUNEX</div>
+          <div class="subtitle">Empowering Digital Understanding for the Next Era of Learning with Xenial Support</div>
+        </div>
+      </div>
+  </header>
+
+  <!-- main app container -->
+  <main id="appContainer" class="app-container theme1">
+    <div id="app" class="app-content" role="main" aria-live="polite"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

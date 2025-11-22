@@ -1,0 +1,19 @@
+@echo off
+echo =====================================
+echo    Starting EDUNEX Learning Portal
+echo =====================================
+
+echo.
+echo 🔵 Starting Flask Backend...
+start cmd /k "cd backend && python app.py"
+
+timeout /t 3 >nul
+
+echo.
+echo 🔵 Opening Website...
+start "" "http://127.0.0.1:5500/New_folder/index.html"
+
+echo.
+echo =====================================
+echo         EDUNEX is now running!
+echo =====================================

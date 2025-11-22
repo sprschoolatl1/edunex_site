@@ -1,0 +1,430 @@
+/* ============================
+   EDUNEX — style.css
+   Modern glassmorphic header, animated background,
+   light/dark mode, 3D cards, rounded gradient border
+   ============================ */
+
+:root{
+  --bg-light: #f2f7ff;
+  --bg-dark: #0b1220;
+  --card: #ffffff;
+  --glass-bg: rgba(255,255,255,0.6);
+  --text: #0b1630;
+  --muted: #667085;
+
+  --accent-a: #0057ff;
+  --accent-b: #00c6ff;
+  --accent-c: #ff7a00;
+  --accent-d: #7b61ff;
+  --border-glow: 16px;
+}
+
+/* ---------------- global ---------------- */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Poppins, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  color:var(--text);
+  background:linear-gradient(180deg,var(--bg-light),#f7fbff);
+  transition: background .45s ease, color .35s ease;
+  overflow-y:auto;
+}
+
+/* dark mode root */
+body.dark{
+  background:linear-gradient(180deg,#071026,#071627);
+  color:#e9f2ff;
+}
+
+/* background animation (particle-like dots + gradient move) */
+#bg-anim{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background: radial-gradient(circle at 10% 10%, rgba(0,86,255,0.06), transparent 6%),
+              radial-gradient(circle at 90% 90%, rgba(0,198,255,0.04), transparent 6%),
+              linear-gradient(120deg, rgba(5,34,102,0.02), rgba(255,255,255,0.02));
+  animation: bgMove 20s linear infinite;
+  mix-blend-mode:screen;
+}
+body.dark #bg-anim{
+  background: radial-gradient(circle at 20% 20%, rgba(123,97,255,0.04), transparent 6%),
+              radial-gradient(circle at 80% 80%, rgba(0,198,255,0.03), transparent 6%),
+              linear-gradient(120deg, rgba(0,0,0,0.12), rgba(10,20,40,0.06));
+  filter: blur(.2px) saturate(1.1);
+}
+@keyframes bgMove { from{background-position:0% 0%} to{background-position:100% 100%} }
+
+/* subtle floating dots overlay */
+#bg-anim::after{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: dotsMove 40s linear infinite;
+  opacity:.8;
+  mix-blend-mode:overlay;
+}
+@keyframes dotsMove { to{ transform: translateY(-60px)} }
+
+/* ---------------- header (glass) ---------------- */
+.header{
+  position:sticky;top:12px;z-index:40;
+  display:flex;justify-content:center;padding:10px 18px;
+}
+.header .glass{
+  width:min(1100px,96%);border-radius:14px;padding:12px 16px;
+  background:var(--glass-bg);backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 10px 30px rgba(9,20,50,0.08), inset 0 1px 0 rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.35);
+}
+body.dark .header .glass{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+/* header inner */
+.header-inner{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.brand{ display:flex; align-items:center; gap:12px; }
+.brand-logo{ width:48px; height:48px; border-radius:10px; object-fit:contain; box-shadow: 0 8px 24px rgba(0,0,0,0.08) }
+.brand-text .title{ font-size:18px; font-weight:700; color:var(--text) }
+.brand-text .subtitle{ font-size:12px; color:var(--muted) }
+
+/* controls */
+.controls{ display:flex; gap:8px; }
+.btn{ border:0; padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:600; background:linear-gradient(90deg,var(--accent-a),var(--accent-b)); color:white; box-shadow:0 8px 20px rgba(0,86,255,0.18); transition:transform .2s }
+.btn.small{ padding:8px 10px; font-size:13px }
+.btn:hover{ transform: translateY(-3px) }
+
+/* ---------------- main card ---------------- */
+.app-container{
+  width:min(1100px,96%); margin:26px auto; padding:22px; border-radius:18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,255,255,0.92));
+  border: 6px solid transparent;
+  box-shadow: 0 18px 40px rgba(9,20,50,0.06);
+  transition: transform .45s ease, box-shadow .45s ease, background .35s;
+  position:relative; overflow:hidden;
+}
+/* rounded gradient border */
+.app-container::before{
+  content:"";position:absolute;inset:8px;border-radius:14px;padding:1px;
+  background: linear-gradient(90deg,var(--accent-a),var(--accent-b),var(--accent-d));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events:none;opacity:0.12;filter:blur(6px);
+}
+
+/* theme variations */
+.app-container.theme1{ border-image:linear-gradient(45deg,var(--accent-a),var(--accent-b)) 1; }
+body.dark .app-container{
+  background: linear-gradient(180deg, rgba(10,18,30,0.72), rgba(6,12,22,0.72));
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* content */
+.app-content{ padding-top:10px; padding-bottom:24px; min-height:72vh; }
+
+/* title */
+h1{ text-align:left; font-size:30px; margin:8px 0 14px 6px; color:var(--text); }
+
+/* grid */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+  gap:18px;
+  padding:12px;
+}
+
+/* card 3D elevated */
+.card{
+  background: linear-gradient(180deg, var(--card), #f9fbff);
+  border-radius:14px; padding:20px; text-align:center; font-weight:700; cursor:pointer;
+  box-shadow: 0 16px 40px rgba(12,24,48,0.08), 0 2px 6px rgba(12,24,48,0.04);
+  transition: transform .45s cubic-bezier(.2,.9,.3,1), box-shadow .45s, filter .3s;
+  transform-style: preserve-3d;
+  border: 1px solid rgba(0,0,0,0.03);
+  display:flex; flex-direction:column; justify-content:center; gap:8px; min-height:110px;
+}
+
+/* subject icon + label */
+.card .icon{
+  width:56px; height:56px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center;
+  font-size:24px; box-shadow:0 10px 30px rgba(0,0,0,0.06);
+  background: linear-gradient(180deg, rgba(0,86,255,0.12), rgba(0,198,255,0.06));
+}
+
+/* hover 3D tilt */
+.card:hover{
+  transform: perspective(900px) translateY(-14px) rotateX(6deg) rotateZ(-1deg) scale(1.02);
+  box-shadow: 0 28px 70px rgba(12,24,48,0.14);
+  filter: saturate(1.05);
+}
+
+/* content inside card */
+.card .label{ font-size:18px; color:var(--text) }
+.card .desc{ font-size:13px; color:var(--muted); font-weight:500 }
+
+/* text box & iframe */
+.text-box{
+  margin-top:16px; padding:16px; border-radius:12px; background:rgba(255,255,255,0.9);
+  box-shadow: 0 16px 40px rgba(12,24,48,0.06);
+  color:var(--text);
+}
+body.dark .text-box{ background: rgba(255,255,255,0.03); color:#e9f2ff; box-shadow: none }
+
+/* video */
+iframe{ width:100%; height:380px; border-radius:12px; border:0; margin-top:10px; }
+
+/* buttons */
+button{ padding:10px 16px; border-radius:10px; border:0; background: linear-gradient(90deg,var(--accent-a),var(--accent-b)); color:white; font-weight:700; cursor:pointer; box-shadow:0 10px 30px rgba(0,86,255,0.16) }
+.prereq-button{ background: linear-gradient(90deg,var(--accent-c),#ffb26a); color:white; margin-right:8px }
+
+/* back link */
+a{ color:var(--accent-d); text-decoration:underline; display:inline-block; margin-top:12px }
+
+/* animations: slide & flip */
+.anim-slide-left-out  { animation: slideLeftOut .36s both; }
+.anim-slide-left-in   { animation: slideLeftIn .48s both; }
+.anim-slide-right-out { animation: slideRightOut .36s both; }
+.anim-slide-right-in  { animation: slideRightIn .48s both; }
+.anim-flip-in         { animation: flipIn .56s both; }
+
+@keyframes slideLeftOut {
+  from{ opacity:1; transform: translateX(0) rotateY(0) }
+  to{ opacity:0; transform: translateX(-40px) rotateY(12deg) }
+}
+@keyframes slideLeftIn {
+  from{ opacity:0; transform: translateX(40px) rotateY(-12deg) }
+  to{ opacity:1; transform: translateX(0) rotateY(0) }
+}
+@keyframes slideRightOut {
+  from{ opacity:1; transform: translateX(0) rotateY(0) }
+  to{ opacity:0; transform: translateX(40px) rotateY(-12deg) }
+}
+@keyframes slideRightIn {
+  from{ opacity:0; transform: translateX(-40px) rotateY(12deg) }
+  to{ opacity:1; transform: translateX(0) rotateY(0) }
+}
+@keyframes flipIn {
+  from{ opacity:0; transform: perspective(900px) rotateY(80deg) translateZ(-40px) scale(.98) }
+  to{ opacity:1; transform: perspective(900px) rotateY(0) translateZ(0) scale(1) }
+}
+
+/* responsive */
+@media (max-width:900px){
+  .grid{ grid-template-columns: repeat(auto-fill,minmax(140px,1fr)) }
+  iframe{ height:240px }
+  .brand-text .title{ font-size:16px }
+  .brand-text .subtitle{ display:none }
+}
+/* FIXED TITLE ALWAYS ON TOP */
+.fixed-title {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 22px;
+  color: #00357a;
+  font-weight: 600;
+  z-index: 2000;   /* HIGH LEVEL */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+/* Push content down because header is fixed */
+.app-container {
+  margin-top: 80px !important;
+}
+/* CENTER PREREQUISITE BUTTONS */
+.prereq-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* CENTER ASK AI BUTTON */
+.ask-ai-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.ask-ai-btn {
+  padding: 12px 26px;
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(90deg,var(--accent-a),var(--accent-b));
+  border-radius: 10px;
+  color: white;
+  border: 0;
+  box-shadow: 0 10px 30px rgba(0,102,255,0.3);
+}
+/* ============================
+   FIX: CENTER BACK LINKS
+   ============================ */
+
+/* Center ALL back buttons */
+a {
+  width: 100%;
+  text-align: center !important;
+  margin-left: 0 !important;
+  display: block !important;
+}
+
+/* EXCEPTION: keep "Back to Subjects" on LEFT */
+a[onclick^="showSubjects"] {
+  text-align: left !important;
+  width: auto !important;
+  display: inline-block !important;
+}
+
+/* ============================
+   FIX: REDUCE BOTTOM GAP
+   (Move the lower border UP)
+   ============================ */
+.app-container {
+  padding-bottom: 40px !important;   /* reduced from large height */
+}
+
+.app-content {
+  min-height: 55vh !important;        /* reduces empty white gap */
+}
+/* =========================================
+   EDUNEX OUTER BACKGROUND EDUCATIONAL THEME
+   (Surrounding the blue box)
+   ========================================= */
+
+/* =========================================
+   FULL EDUCATIONAL THEME BACKGROUND (NO WHITE SPACE)
+   ========================================= */
+
+body {
+  background:
+    url('https://i.ibb.co/2d0dm8c/education-pattern-1.png'),
+    linear-gradient(180deg, #dff0ff, #e6f4ff);
+  background-size: 260px, cover;
+  background-repeat: repeat;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+/* Soft vignette effect around edges */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.06));
+  z-index: -1;
+}
+
+/* Floating icons: pencils, books, bulbs, formulas */
+.floating-edu-icon {
+  position: fixed;
+  font-size: 42px;
+  opacity: 0.20;
+  animation: floatEdu 9s infinite ease-in-out;
+  z-index: -1;
+}
+
+/* Animation */
+@keyframes floatEdu {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-18px) rotate(4deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* ICON POSITIONS */
+#edu1 { top: 10%; left: 6%;  animation-duration: 11s; }
+#edu2 { top: 20%; right: 8%; animation-duration: 8s; }
+#edu3 { bottom: 18%; left: 10%; animation-duration: 12s; }
+#edu4 { bottom: 12%; right: 12%; animation-duration: 10s; }
+
+/* =========================================
+   CLEAN FULL EDUCATIONAL BACKGROUND
+   (No text, no watermark, no external image)
+   ========================================= */
+
+body {
+  background-color: #dff3ff;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0, 86, 255, 0.08) 0, transparent 60%),
+    radial-gradient(circle at 80% 30%, rgba(0, 198, 255, 0.08) 0, transparent 60%),
+    radial-gradient(circle at 30% 80%, rgba(255, 170, 0, 0.08) 0, transparent 60%),
+    radial-gradient(circle at 70% 75%, rgba(123, 97, 255, 0.08) 0, transparent 60%);
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+/* =========================================
+   FLOATING EDUCATIONAL ICONS (RANDOM CHANGING)
+   ========================================= */
+
+.ficon {
+  position: fixed;
+  font-size: 42px;
+  opacity: 0.25;
+  z-index: -1;
+  animation: floatAnim 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes floatAnim {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-20px) rotate(8deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+/* ======================================================
+   FORCE FLOATING ICONS TO APPEAR OUTSIDE BLUE BOX AREA
+   ====================================================== */
+
+:root {
+  --app-left: 50%;
+  --app-top: 200px;
+  --app-width: 1100px;
+  --app-height: 650px;
+}
+
+/* Update values dynamically using JS */
+body.layout-ready {
+  --app-left: var(--calc-app-left);
+  --app-top: var(--calc-app-top);
+  --app-width: var(--calc-app-width);
+  --app-height: var(--calc-app-height);
+}
+
+/* Prevent icons from appearing inside this zone */
+.ficon {
+  position: fixed;
+  font-size: 42px;
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatAnim 6s ease-in-out infinite;
+
+  /* "No floating inside app-container box" clipping exclusion */
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% var(--app-top),
+    0% var(--app-top),
+    0% 100%,
+    100% 100%,
+    100% calc(var(--app-top) + var(--app-height)),
+    0% calc(var(--app-top) + var(--app-height))
+  );
+}

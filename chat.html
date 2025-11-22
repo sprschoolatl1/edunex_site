@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Assistant</title>
+    <link rel="stylesheet" href="chat.css" />
+    <script src="chat.js" defer></script>
+
+    <!-- ICONS (Heroicons CDN) -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+    <div class="chat-container">
+
+        <div class="chat-header">
+            <h2>AI Assistant</h2>
+        </div>
+
+        <div id="chat-messages" class="chat-messages"></div>
+
+        <form id="chat-form" class="chat-input-area">
+            <label class="icon-btn">
+                <input type="file" id="fileUpload" hidden />
+                <i data-feather="paperclip"></i>
+            </label>
+
+            <label class="icon-btn" id="voiceBtn">
+                <i data-feather="mic"></i>
+            </label>
+
+            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
+
+            <button type="submit" class="send-btn">
+                <i data-feather="send"></i>
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
