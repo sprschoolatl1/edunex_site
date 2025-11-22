@@ -89,7 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // -----------------------------
     // SEND MESSAGE → GEMINI
     // -----------------------------
-    chatForm.addEventListener("submit", async (e) => {
+    const BACKEND_URL = "https://edunex-backend-2.onrender.com/gemini";
+
+chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const text = userInput.value.trim();
@@ -101,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     addTyping();
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/gemini", {
+        const response = await fetch(BACKEND_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ query: text })
@@ -120,3 +122,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+
